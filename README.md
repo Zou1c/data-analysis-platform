@@ -6,6 +6,11 @@
 ##### 贝叶斯算法应用(待定)  
 ##### 系统功能中的可视化，用图表显示一些分析结果  
   
+## Push方式：
+从development分支上新建一个分支(名字任意取，例如a)，然后将自己的代码push到新分支a上  
+之后创建pull request，并进行branch merge操作；注意箭头方向 development <- a
+提示合并成功并且看到development分支下更新后，删除自己创建的新分支a
+尤其注意：不要直接push到main分支上!
   
 ## 成员：  
 邹济源
