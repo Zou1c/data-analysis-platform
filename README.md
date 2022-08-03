@@ -1,2 +1,3 @@
-# data-analysis-platform
-实训课中期项目，使用python
+# 数据分析平台
+
+push须知：
