@@ -117,6 +117,19 @@ class JobDao(BaseDao):
         return job, sjobList
         pass
 
+
+    def getPDC(self):
+        sql = "select jobCity,jobType from t_jobdata"
+        self.execute(sql,[])
+        condition = self.fetchall()
+        return condition
+
+    def getJobSalary(self):
+        sql = "select jobLowSalary,jobHighSalary from t_jobdata"
+        self.execute(sql, [])
+        result = self.fetchall()
+        return result
+
     def close(self):
         super().close()
         pass

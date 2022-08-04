@@ -185,3 +185,17 @@ def getJobDetail():
     return render_template("jobdetail.html", job=job, sjobList=sjobList)
     pass
 
+
+
+
+@jobController.route("/jobsalarypredict")
+def predictSalary():
+    #predictInput = {'jobCity': "北京", 'jobType': "大数据"}
+    jobCity = request.args.get("jobCity")
+    jobType = request.args.get("jobType")
+
+    jobService = JobService()
+    lowSalary, highSalary = jobService.predictSalary([[]])
+
+    return render_template("jobsalarypredict.html")
+    pass
