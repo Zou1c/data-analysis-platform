@@ -172,7 +172,16 @@ def getJobDetail():
     jobId = request.args.get("jobId")
     jobService = JobService()
     job, sjobList = jobService.getJobDetails(jobId)
-
+    jobDetail=job.get("jobDetail")
+    if jobDetail=="":
+        jobDetail="暂无相关信息！"
+    elif "Recruitment stopped!" in jobDetail:
+        jobDetail="该职位已停止招聘！"
+    else :
+        jobDetail=jobDetail.replace('\xa0',"")
+        while "\n\n" in jobDetail:
+            jobDetail=jobDetail.replace("\n\n",'\n')
+    job["jobDetail"]=jobDetail
     return render_template("jobdetail.html", job=job, sjobList=sjobList)
     pass
 
