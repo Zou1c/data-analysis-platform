@@ -1,3 +1,4 @@
 .gitignore
 .idea/*
+dao/mysql.json
 **/__pycache__
