@@ -63,14 +63,34 @@
                              <div class="card card-animate">
                                 <div class="card-body">
                                     <p class="card-subtitle mb-4">
-                                        <form action="/joblist" method="post" name="predictForm" class="form-inline">
-                                            城市名:<input type="text" class="form-control"  name="searchCity" />
-                                            职位类型名:<input type="text" class="form-control"  name="searchJobType"/>
-                                            <button type="button" class="btn btn-primary" onclick="predictSalary()" >职位相似度分析</button>&nbsp;
-                                            结果：
-                                            <input type="text" class="form-control"  name="lowSalary" value="{{ lowSalary }}"/>
-                                            <input type="text" class="form-control"  name="highSalary" value="{{ highSalary }}"/>
+                                        <form action="/jobsalarypredict" method="post" name="predictForm" class="form-inline" onsubmit="return check(this)">
+                                            <div class="card-body" style="width:72rem; ">
+                                                城市名:<input type="text" class="form-control"  name="jobCity" value="{{ jobCity }}"/>
+                                            </div>
+                                            <div class="card-body" style="width:72rem;">
+                                                职位类型：
+                                                <select class="form-control form-control-placeholder" name="jobType" value="Java">
+                                                    <option value="Java" >Java</option>
+                                                    <option value="Python">Python</option>
+                                                    <option value="大数据">大数据</option>
+                                                    <option value="机器学习">机器学习</option>
+                                                </select>
+
+                                            </div>
+                                            <div class="card-body">
+                                                <button type="submit" class="btn btn-secondary">职位薪资预测</button>
+                                            </div>
                                         </form>
+                                    </p>
+                                </div>
+
+                                 <div class="card-body">
+                                    <p class="card-subtitle mb-4">
+                                        <div class="card" style="height: 8rem;">
+                                        <font size="4">结果：</font>
+                                                <font size="8"> {{ lowSalary }}K ——
+                                                {{ highSalary }}K </font>
+                                        </div>
                                     </p>
                                 </div>
                             </div>
@@ -108,7 +128,8 @@
     <script src="/static/assets/js/echarts.min.js"></script>
     <script src="/static/assets/js/china.js" ></script>
 
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+    </script>
 
     <script src="/static/assets/js/area_echarts.js"></script>
 </body>
