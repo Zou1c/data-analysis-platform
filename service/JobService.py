@@ -112,7 +112,7 @@ class JobService():
         pass
 
 
-    def predictSalary(self, predictInput):
+    def predictSalary(self, input1, input2):
         jobDao = JobDao()
         lowSalary = 0
         highSalary = 0
@@ -152,15 +152,21 @@ class JobService():
                 xCount.append(pair)
 
 
-            # 调库预测  [[1,2]]广州，大数据,r:20-40； [[2,2]]北京，Java;r:
-            test = [[5,2]]
+            # 调库预测  [[1,2]]广州，大数据,r:20-40； [[2,2]]北京，Java;r:20-40:
+            if input1:  # 利用字典转换输入为数字标签
+                xc = [[Dict1.get(input1), Dict2.get(input2)]]
+            else:
+                lowSalary = -1
+                highSalary = -1
+                return lowSalary, highSalary
+
             bayers = MultinomialNB()
             bayers.fit(xCount, y1)
-            result = bayers.predict(test)
-            print('lowsalary',result)
+            result = bayers.predict(xc)
+            lowSalary = result[0]
             bayers.fit(xCount, y2)
-            result = bayers.predict(test)
-            print('highsalary',result)
+            result = bayers.predict(xc)
+            highSalary = result[0]
 
         finally:
             jobDao.close()

@@ -200,14 +200,13 @@ def getJobDetail():
 
 
 
-@jobController.route("/jobsalarypredict")
+@jobController.route("/jobsalarypredict", methods=['get', 'post'])
 def predictSalary():
-    #predictInput = {'jobCity': "北京", 'jobType': "大数据"}
-    jobCity = request.args.get("jobCity")
-    jobType = request.args.get("jobType")
+    jobCity =  request.form.get('jobCity')
+    jobType = request.form.get("jobType")
 
     jobService = JobService()
-    lowSalary, highSalary = jobService.predictSalary([[]])
+    lowSalary, highSalary = jobService.predictSalary(jobCity, jobType)
 
-    return render_template("jobsalarypredict.html")
+    return render_template("jobsalarypredict.html", lowSalary=lowSalary, highSalary=highSalary, jobCity=jobCity, jobType=jobType)
     pass
