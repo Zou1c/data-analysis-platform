@@ -197,6 +197,13 @@ def getJobDetail():
     return render_template("jobdetail.html", job=job, sjobList=sjobList)
     pass
 
+<<<<<<< HEAD
+@jobController.route("/meanSalary")
+def getMeanSalary():
+    return render_template("meanSalary.html")
+    pass
+
+=======
 
 
 
@@ -210,3 +217,4 @@ def predictSalary():
 
     return render_template("jobsalarypredict.html", lowSalary=lowSalary, highSalary=highSalary, jobCity=jobCity, jobType=jobType)
     pass
+>>>>>>> main
