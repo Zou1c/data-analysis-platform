@@ -42,6 +42,10 @@ def logout():
 def mainPage():
     return render_template("main.html")
 
+@app.route("/citydis")
+def citydisPage():
+    return render_template("citydisChart.html")
+
 # rest
 @app.route("/testrest/<int:id>")
 def testRest(id):

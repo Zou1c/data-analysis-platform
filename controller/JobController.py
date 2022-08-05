@@ -26,6 +26,13 @@ def getJobCountByJobCity():
     return json.dumps(data, ensure_ascii=False)
     pass
 
+@jobController.route('/getjobsalarybycity')
+def getJobSalaryByJobCity():
+    jobService = JobService()
+    data = jobService.getJobSalaryByJobCity()
+    return json.dumps(data, ensure_ascii=False)
+    pass
+
 @jobController.route('/joblist', methods=['get', 'post'])
 def jobList():
     searchName = request.form.get('searchName')
@@ -173,7 +180,7 @@ def getJobDetail():
     jobService = JobService()
     job, sjobList = jobService.getJobDetails(jobId)
     jobDetail=job.get("jobDetail")
-    if jobDetail=="":
+    if jobDetail == None:
         jobDetail="暂无相关信息！"
     elif "Recruitment stopped!" in jobDetail:
         jobDetail="该职位已停止招聘！"
@@ -208,5 +215,12 @@ def predictSalary():
     jobService = JobService()
     lowSalary, highSalary = jobService.predictSalary(jobCity, jobType)
 
-    return render_template("jobsalarypredict.html", lowSalary=lowSalary, highSalary=highSalary, jobCity=jobCity, jobType=jobType)
+    # 收集数据库中所有的职位种类
+    jobTypeSet = jobService.getJobTypeSet()
+    jobTypeList = []
+    for i in jobTypeSet:
+        jobTypeList.append(i.get('jobType'))
+
+    return render_template("jobsalarypredict.html", lowSalary=lowSalary, highSalary=highSalary, jobCity=jobCity, jobType=jobType,
+                           jobTypeList=jobTypeList)
     pass

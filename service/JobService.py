@@ -13,6 +13,16 @@ class JobService():
         return data
         pass
 
+    def getJobSalaryByJobCity(self):
+        jobDao = JobDao()
+        try:
+            data = jobDao.getJobSalaryByJobCity()
+        finally:
+            jobDao.close()
+            pass
+        return data
+        pass
+
     def getJobCountStatisticByJobType(self):
         jobDao = JobDao()
         try:
@@ -153,7 +163,7 @@ class JobService():
 
 
             # 调库预测  [[1,2]]广州，大数据,r:20-40； [[2,2]]北京，Java;r:20-40:
-            if input1:  # 利用字典转换输入为数字标签
+            if Dict1.get(input1):  # 利用字典转换输入为数字标签
                 xc = [[Dict1.get(input1), Dict2.get(input2)]]
             else:
                 lowSalary = -1
@@ -172,4 +182,16 @@ class JobService():
             jobDao.close()
 
         return lowSalary, highSalary
-    pass
+
+
+
+    def getJobTypeSet(self):
+        jobDao = JobDao()
+        try:
+            jobTypeList = jobDao.getJobTypeSet()
+        finally:
+            jobDao.close()
+        return jobTypeList
+
+
+
