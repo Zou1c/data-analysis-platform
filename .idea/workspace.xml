@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29fad5b2-3ae4-461d-b6cc-123e8658dc6d" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/datadance.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/datadance.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/JobController.py" beforeDir="false" afterPath="$PROJECT_DIR$/controller/JobController.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dao/mysql.json" beforeDir="false" afterPath="$PROJECT_DIR$/dao/mysql.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/leftbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/leftbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/assets/js/getMeanSalary.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/assets/js/getMeanSalary.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,6 +167,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />

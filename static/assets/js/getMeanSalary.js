@@ -1,5 +1,5 @@
  $.ajax({
-
+                //待修改
                 url: '/getjobsalarybytype',
                 method: 'post',
                 data: {
