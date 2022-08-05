@@ -1,4 +1,5 @@
  $.ajax({
+                //待修改 根据后端接口而定
 
                 url: '/getjobsalarybytype',
                 method: 'post',
