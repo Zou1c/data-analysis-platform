@@ -172,7 +172,41 @@ def getJobDetail():
     jobId = request.args.get("jobId")
     jobService = JobService()
     job, sjobList = jobService.getJobDetails(jobId)
-
+    jobDetail=job.get("jobDetail")
+    if jobDetail=="":
+        jobDetail="暂无相关信息！"
+    elif "Recruitment stopped!" in jobDetail:
+        jobDetail="该职位已停止招聘！"
+    else :
+        #将字符串中'\xa0'和'\r'去掉
+        jobDetail=jobDetail.replace('\xa0',"")
+        jobDetail=jobDetail.replace('\r',"")
+        #将连续的换行符删掉，只保留一个
+        while "\n\n" in jobDetail:
+            jobDetail=jobDetail.replace("\n\n",'\n')
+        #删除‘职业要求’之前的文字说明
+        if "任职要求" in jobDetail:
+            jobDetail=jobDetail[jobDetail.index("任职要求"):]
+        elif "任职资格"in jobDetail:
+            jobDetail=jobDetail[jobDetail.index("任职资格"):]
+        elif "要求："in jobDetail:
+            jobDetail=jobDetail[jobDetail.index("要求"):]
+        elif "任职条件"in jobDetail:
+            jobDetail=jobDetail[jobDetail.index("任职条件"):]
+    job["jobDetail"]=jobDetail
     return render_template("jobdetail.html", job=job, sjobList=sjobList)
     pass
 
+
+
+
+@jobController.route("/jobsalarypredict", methods=['get', 'post'])
+def predictSalary():
+    jobCity =  request.form.get('jobCity')
+    jobType = request.form.get("jobType")
+
+    jobService = JobService()
+    lowSalary, highSalary = jobService.predictSalary(jobCity, jobType)
+
+    return render_template("jobsalarypredict.html", lowSalary=lowSalary, highSalary=highSalary, jobCity=jobCity, jobType=jobType)
+    pass
