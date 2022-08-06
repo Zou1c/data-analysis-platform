@@ -1,10 +1,287 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
+    <meta charset="utf-8" />
+    <title>职位数据可视化</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="MyraStudio" name="author" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- App favicon -->
+    <link rel="shortcut icon" href="/static/assets/images/favicon.ico">
+
+    <!-- App css -->
+    <link href="/static/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/assets/css/theme.min.css" rel="stylesheet" type="text/css" />
+
 </head>
+
 <body>
-$END$
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+        <!-- ========== Left Sidebar Start ========== -->
+        {% include 'leftbar.html' %}
+        <!-- Left Sidebar End -->
+
+        {% include "header.html" %}
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0 font-size-18">数据可视化</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">数据可视化</a></li>
+                                        <li class="breadcrumb-item active">不同类型职位薪资分布</li>
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <h4 class="text-center">不同职位类型的薪资</h4>
+                    <div class="row">
+                        <div class="col-lg-6">
+                             <div class="card card-animate" style="height: 540px;">
+                                <div class="card-body">
+                                    <div id="jobSalaryPie1" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                             <div class="card card-animate" style="height: 540px;">
+                                <div class="card-body">
+                                    <div id="jobSalaryPie2" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end row -->
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                             <div class="card card-animate" style="height: 540px;">
+                                <div class="card-body">
+                                    <div id="jobSalaryPie3" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                             <div class="card card-animate" style="height: 540px;">
+                                <div class="card-body">
+                                    <div id="jobSalaryPie4" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- end row -->
+
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+
+        </div>
+        <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+
+    <!-- Overlay-->
+    <div class="menu-overlay"></div>
+
+
+    <!-- jQuery  -->
+    <script src="/static/assets/js/jquery.min.js"></script>
+    <script src="/static/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/assets/js/metismenu.min.js"></script>
+    <script src="/static/assets/js/waves.js"></script>
+    <script src="/static/assets/js/simplebar.min.js"></script>
+    <!-- Morris Custom Js-->
+    <script src="/static/assets/pages/dashboard-demo.js"></script>
+
+    <!-- App js -->
+    <script src="/static/assets/js/theme.js"></script>
+    <script src="/static/assets/js/echarts.min.js"></script>
+    <script src="/static/assets/js/china.js" ></script>
+    <script type="text/javascript">
+           $.ajax({
+                url: '/getjobsalarybytype',
+                method: 'post',
+                data: {
+
+                },
+                dataType: "json",
+                success: function (data) {
+                    jobTypeList = data[1]   //注意先后顺序
+                    data = data[0]
+
+                    pieDataList = []
+                    for (i = 0 ; i<4 && i<data.length ; i++) {
+                        tempList = []
+                        for (j = 0; j < data[i].length; j++) {
+                            jsonData = {value: data[i][j].Count, name: data[i][j].Level}
+                            tempList[j] = jsonData
+                        }
+                        pieDataList.push(tempList)
+                    }
+
+                    var chartDom1 = document.getElementById('jobSalaryPie1');
+                    var chartDom2 = document.getElementById('jobSalaryPie2');
+                    var chartDom3 = document.getElementById('jobSalaryPie3');
+                    var chartDom4 = document.getElementById('jobSalaryPie4');
+                    var myChart1 = echarts.init(chartDom1);
+                    var myChart2 = echarts.init(chartDom2);
+                    var myChart3 = echarts.init(chartDom3);
+                    var myChart4 = echarts.init(chartDom4);
+                    var option1;
+                    var option2;
+                    var option3;
+                    var option4;
+
+                    option1 = {
+                      title: {
+                        text: jobTypeList[0],
+                        subtext: '',
+                        left: 'center'
+                      },
+                      tooltip: {
+                        trigger: 'item'
+                      },
+                      legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                      },
+                      series: [
+                        {
+                          type: 'pie',
+                          radius: '50%',
+                          data: pieDataList[0],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }
+                      ]
+                    };
+
+                    option2 = {
+                      title: {
+                        text: jobTypeList[1],
+                        subtext: '',
+                        left: 'center'
+                      },
+                      tooltip: {
+                        trigger: 'item'
+                      },
+                      legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                      },
+                      series: [
+                        {
+                          type: 'pie',
+                          radius: '50%',
+                          data: pieDataList[1],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }
+                      ]
+                    };
+
+                    option3 = {
+                      title: {
+                        text: jobTypeList[2],
+                        subtext: '',
+                        left: 'center'
+                      },
+                      tooltip: {
+                        trigger: 'item'
+                      },
+                      legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                      },
+                      series: [
+                        {
+                          type: 'pie',
+                          radius: '50%',
+                          data: pieDataList[2],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }
+                      ]
+                    };
+
+                    option4 = {
+                      title: {
+                        text: jobTypeList[3],
+                        subtext: '',
+                        left: 'center'
+                      },
+                      tooltip: {
+                        trigger: 'item'
+                      },
+                      legend: {
+                        orient: 'vertical',
+                        left: 'left'
+                      },
+                      series: [
+                        {
+                          type: 'pie',
+                          radius: '50%',
+                          data: pieDataList[3],
+                          emphasis: {
+                            itemStyle: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                          }
+                        }
+                      ]
+                    };
+
+                    option1 && myChart1.setOption(option1);
+                    option2 && myChart2.setOption(option2);
+                    option3 && myChart3.setOption(option3);
+                    option4 && myChart4.setOption(option4);
+                },
+                error: function (xhr) {
+                }
+            })
+
+
+
+    </script>
+    <script src="/static/assets/js/area_echarts.js"></script>
 </body>
+
 </html>

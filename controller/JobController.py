@@ -4,10 +4,57 @@ from service.JobService import JobService
 
 jobController = Blueprint("jobController", __name__)
 
-@jobController.route('/getjobsalarybytype', methods=['get', 'post'])
+@jobController.route('/getjobsalarybyjobtype', methods=['get', 'post'])
 def getJobSalaryByJobType():
     jobService = JobService()
     data = jobService.getJobSalaryByJobType()
+    return json.dumps(data, ensure_ascii=False)
+    pass
+
+@jobController.route('/getjobsalarybytype', methods=['get', 'post'])
+def getJobSalaryByType():
+    jobService = JobService()
+    meanSalary = jobService.getJobSalaryByType()
+
+    jobTypeSet = jobService.getJobTypeSet()
+    jobTypeList = []
+    for i in jobTypeSet:
+        jobTypeList.append(i.get('jobType'))
+
+    data = []
+    content = []
+    for onetype in jobTypeList:
+        tempList = []
+        for i in range(6):
+            if i == 0:
+                tempList.append({'Level': "10000以下", 'Count': 0})
+            elif i == 5:
+                tempList.append({'Level': "50000以上", 'Count': 0})
+            else:
+                tempList.append({'Level':str(i*10000)+"-"+str(i*10000+10000),'Count':0})
+
+        for item in meanSalary:
+            v = item.get('jobMeanSalary')
+            t = item.get('jobType')
+            value = int(v / 10000)
+            if t == onetype:
+                if value == 0:
+                    tempList[0]['Count'] += 1
+                elif value == 1:
+                    tempList[1]['Count'] += 1
+                elif value == 2:
+                    tempList[2]['Count'] += 1
+                elif value == 3:
+                    tempList[3]['Count'] += 1
+                elif value == 4:
+                    tempList[4]['Count'] += 1
+                else:
+                    tempList[5]['Count'] += 1
+        content.append(tempList)
+    # end for
+    data.append(content)
+    data.append(jobTypeList)
+
     return json.dumps(data, ensure_ascii=False)
     pass
 
@@ -16,6 +63,7 @@ def getJobSalaryByJobType():
 def getJobCountByJobType():
     jobService = JobService()
     data = jobService.getJobCountStatisticByJobType()
+    print(data)
     return json.dumps(data, ensure_ascii=False)
     pass
 

@@ -46,6 +46,10 @@ def mainPage():
 def citydisPage():
     return render_template("citydisChart.html")
 
+@app.route("/typedis")
+def typedisPage():
+    return render_template("typedisChart.html")
+
 # rest
 @app.route("/testrest/<int:id>")
 def testRest(id):

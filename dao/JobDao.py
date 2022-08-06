@@ -16,6 +16,11 @@ class JobDao(BaseDao):
         return self.fetchall()
         pass
 
+    def getJobSalaryByType(self):
+        sql = "select jobMeanSalary, jobType from t_jobdata"
+        result = self.execute(sql)
+        return self.fetchall()
+
     def getJobSalaryStatisticByJobType(self):
         sql = "select AVG(jobMeanSalary) as jobsavg, jobType from t_jobdata group by  jobType order by jobsavg desc"
         result = self.execute(sql)
