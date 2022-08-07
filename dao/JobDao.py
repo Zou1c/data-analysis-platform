@@ -8,11 +8,18 @@ class JobDao(BaseDao):
         return result
         pass
 
-    def getJobSalaryStatisticByJobCity(self):
-        sql = "select AVG(jobMeanSalary) as jobsavg, jobCity from t_jobdata group by  jobCity order by jobsavg desc"
+    def getJobSalaryByJobCity(self):
+        # 数据库中样本数量低于6的不计入统计
+        sql = "select AVG(jobMeanSalary) as jobsavg, jobCity from t_jobdata " \
+              "group by jobCity having count(*) > 5 order by jobsavg desc"
         result = self.execute(sql)
         return self.fetchall()
         pass
+
+    def getJobSalaryByType(self):
+        sql = "select jobMeanSalary, jobType from t_jobdata"
+        result = self.execute(sql)
+        return self.fetchall()
 
     def getJobSalaryStatisticByJobType(self):
         sql = "select AVG(jobMeanSalary) as jobsavg, jobType from t_jobdata group by  jobType order by jobsavg desc"
@@ -126,6 +133,12 @@ class JobDao(BaseDao):
 
     def getJobSalary(self):
         sql = "select jobLowSalary,jobHighSalary from t_jobdata"
+        self.execute(sql, [])
+        result = self.fetchall()
+        return result
+
+    def getJobTypeSet(self):
+        sql = "select jobType from t_jobdata group by jobType"
         self.execute(sql, [])
         result = self.fetchall()
         return result

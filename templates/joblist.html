@@ -144,7 +144,9 @@
                                                 <td>
                                                     <button class="btn btn-danger btn-sm" onclick="removeUser({{ job.jobId }})">删除</button>
                                                     <button data-toggle="modal" onclick="updateUser({{ job.jobId }}, '{{ job.jobName }}', '{{ job.jobAddress }}')" data-target="#updateModal"  class="btn btn-info  btn-sm">修改</button>
-                                                     <button data-toggle="modal" onclick="updateUser({{ job.jobId }}, '{{ job.jobName }}', '{{ job.jobAddress }}')" data-target="#updateModal"  class="btn btn-info  btn-sm">详情</button>
+                                                     <a href="/jobdetail?jobId={{ job.jobId }}">
+                                                        <button data-toggle="modal" data-target="#updateModal"  class="btn btn-info  btn-sm">详情</button>
+                                                     </a>
                                                 </td>
                                             </tr>
                                         {% endfor %}
@@ -169,21 +171,6 @@
                 </div> <!-- container-fluid -->
             </div>
             <!-- End Page-content -->
-
-            <footer class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            2020 © Opatix.
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="text-sm-right d-none d-sm-block">
-                                Design & Develop by Myra
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
 
         </div>
         <!-- end main content-->

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>首页</title>
+    <title>职位数据可视化</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="MyraStudio" name="author" />
@@ -42,12 +42,12 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="page-title-box d-flex align-items-center justify-content-between">
-                                <h4 class="mb-0 font-size-18">首页</h4>
+                                <h4 class="mb-0 font-size-18">数据可视化</h4>
 
                                 <div class="page-title-right">
                                     <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">系统平台</a></li>
-                                        <li class="breadcrumb-item active">首页</li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">数据可视化</a></li>
+                                        <li class="breadcrumb-item active">职位薪资/城市分布</li>
                                     </ol>
                                 </div>
 
@@ -58,34 +58,23 @@
 
 
                     <div class="row">
-
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                              <div class="card card-animate">
                                 <div class="card-body">
-                                    <h4 class="card-title d-inline-block">不同职位薪资对比图</h4>
-                                    <div id="jobBar" style="height: 320px;"></div>
+                                    <h4 class="card-title d-inline-block">薪资平均水平直方图</h4>
+                                    <div id="jobSalaryBar" style="height: 480px;"></div>
                                 </div>
                             </div>
                         </div> <!-- end col -->
 
-                        <div class="col-lg-4">
-                             <div class="card card-animate">
-                                <div class="card-body">
-                                    <h4 class="card-title d-inline-block">职位数量对比图</h4>
-
-                                    <div id="jobPie" class="morris-chart" style="height: 320px;"></div>
-                                </div>
-                            </div>
-                        </div> <!-- end col -->
                     </div>
-                    <!-- end row-->
 
                     <div class="row">
                         <div class="col-lg-12">
                              <div class="card card-animate">
                                 <div class="card-body">
-                                    <h4 class="card-title d-inline-block">职位数据分布图</h4>
-                                    <div id="jobMap"  style="height: 480px;"></div>
+                                    <h4 class="card-title d-inline-block">职位所属城市分布图</h4>
+                                    <div id="jobArea" class="morris-chart" style="height: 480px;"></div>
                                 </div>
                             </div>
                         </div> <!-- end col -->
@@ -122,8 +111,77 @@
     <script src="/static/assets/js/china.js" ></script>
     <script type="text/javascript">
            $.ajax({
-                url: '/getjobsalarybyjobtype',
-                method: 'post',
+            url: '/getjobcountbycity',
+            method: 'post',
+            data: {},
+            dataType: 'json',
+            success: function (data){
+                pieData = []
+                for(i = 0; i < data.length; i++){
+                    jsonData = {value: data[i].jobCount, name: data[i].jobCity}
+                    pieData[i] = jsonData
+                }
+
+                var chartDom = document.getElementById('jobArea');
+                var myChart = echarts.init(chartDom);
+                var option;
+
+                option = {
+                  backgroundColor: '#fff',
+                  tooltip: {
+                    trigger: 'item'
+                  },
+                  visualMap: {
+                    show: true,
+                    min: 80,
+                    max: 600,
+                    inRange: {
+                      colorLightness: [0.15, 0.5]
+                    }
+                  },
+                  series: [
+                    {
+                      type: 'pie',
+                      radius: '80%',
+                      center: ['50%', '60%'],
+                      data: pieData,
+                      roseType: 'radius',
+                      label: {
+                        color: '#000'
+                      },
+                      labelLine: {
+                        lineStyle: {
+                            color: '#000'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                      },
+                      itemStyle: {
+                        color: 'rgb(10,50,200)',
+                        shadowBlur: 200,
+                        shadowColor: '#eee'
+                      },
+                      animationType: 'scale',
+                      animationEasing: 'elasticOut',
+                      animationDelay: function (idx) {
+                        return Math.random() * 200;
+                      }
+                    }
+                  ]
+                };
+
+                option && myChart.setOption(option);
+            },
+            error: function (xhr){
+
+            }
+        })
+
+
+        $.ajax({
+                url: '/getjobsalarybycity',
+                method: 'get',
                 data: {
 
                 },
@@ -132,11 +190,11 @@
                     labels = []
                     values = []
                     for(i=0;i<data.length;i++){
-                        labels[i] = data[i].jobType
+                        labels[i] = data[i].jobCity
                         values[i] = data[i].jobsavg
                     }
 
-                    var chartDom = document.getElementById('jobBar');
+                    var chartDom = document.getElementById('jobSalaryBar');
                     var myChart = echarts.init(chartDom);
                     var option;
 
@@ -152,61 +210,6 @@
                         {
                           data: values,
                           type: 'bar'
-                        }
-                      ]
-                    };
-
-                    option && myChart.setOption(option);
-
-                },
-                error: function (xhr) {
-                }
-            })
-
-           $.ajax({
-                url: '/getjobcountbytype',
-                method: 'post',
-                data: {
-
-                },
-                dataType: "json",
-                success: function (data) {
-                    pieData = []
-                    for(i=0;i<data.length;i++){
-                        jsonData = {value : data[i].jobCount, name: data[i].jobType}
-                        pieData[i] = jsonData
-                    }
-
-                    var chartDom = document.getElementById('jobPie');
-                    var myChart = echarts.init(chartDom);
-                    var option;
-
-                    option = {
-                      title: {
-                        text: '',
-                        subtext: '',
-                        left: 'center'
-                      },
-                      tooltip: {
-                        trigger: 'item'
-                      },
-                      legend: {
-                        orient: 'vertical',
-                        left: 'left'
-                      },
-                      series: [
-                        {
-                          name: 'Access From',
-                          type: 'pie',
-                          radius: '50%',
-                          data: pieData,
-                          emphasis: {
-                            itemStyle: {
-                              shadowBlur: 10,
-                              shadowOffsetX: 0,
-                              shadowColor: 'rgba(0, 0, 0, 0.5)'
-                            }
-                          }
                         }
                       ]
                     };

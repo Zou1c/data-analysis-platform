@@ -1,12 +1,31 @@
 from dao.JobDao import JobDao
 from sklearn.naive_bayes import MultinomialNB
+import numpy as np
 
 class JobService():
 
-    def getJobSalaryByJobType(self):
+    def getJobSalaryByJobType(self): # 获取平均值
         jobDao = JobDao()
         try:
             data = jobDao.getJobSalaryStatisticByJobType()
+        finally:
+            jobDao.close()
+            pass
+        return data
+        pass
+
+    def getJobSalaryByType(self): # 获取所有值
+        jobDao = JobDao()
+        try:
+            data = jobDao.getJobSalaryByType()
+        finally:
+            jobDao.close()
+        return data
+
+    def getJobSalaryByJobCity(self):
+        jobDao = JobDao()
+        try:
+            data = jobDao.getJobSalaryByJobCity()
         finally:
             jobDao.close()
             pass
@@ -151,9 +170,8 @@ class JobService():
                 pair = [v1,v2]
                 xCount.append(pair)
 
-
-            # 调库预测  [[1,2]]广州，大数据,r:20-40； [[2,2]]北京，Java;r:20-40:
-            if input1:  # 利用字典转换输入为数字标签
+            # 调库预测,两次; 每次两个特征x
+            if Dict1.get(input1):  # 利用字典转换输入为数字标签
                 xc = [[Dict1.get(input1), Dict2.get(input2)]]
             else:
                 lowSalary = -1
@@ -161,6 +179,9 @@ class JobService():
                 return lowSalary, highSalary
 
             bayers = MultinomialNB()
+            # print('y1',y1)
+            # print('y2',y2)
+            # print('xCount',xCount)
             bayers.fit(xCount, y1)
             result = bayers.predict(xc)
             lowSalary = result[0]
@@ -172,4 +193,16 @@ class JobService():
             jobDao.close()
 
         return lowSalary, highSalary
-    pass
+
+
+
+    def getJobTypeSet(self):
+        jobDao = JobDao()
+        try:
+            jobTypeList = jobDao.getJobTypeSet()
+        finally:
+            jobDao.close()
+        return jobTypeList
+
+
+

@@ -65,15 +65,14 @@
                                     <p class="card-subtitle mb-4">
                                         <form action="/jobsalarypredict" method="post" name="predictForm" class="form-inline" onsubmit="return check(this)">
                                             <div class="card-body" style="width:72rem; ">
-                                                城市名:<input type="text" class="form-control"  name="jobCity" value="{{ jobCity }}"/>
+                                                城市名：<input type="text" class="form-control"  name="jobCity" value="{{ jobCity }}"/>
                                             </div>
                                             <div class="card-body" style="width:72rem;">
                                                 职位类型：
-                                                <select class="form-control form-control-placeholder" name="jobType" value="Java">
-                                                    <option value="Java" >Java</option>
-                                                    <option value="Python">Python</option>
-                                                    <option value="大数据">大数据</option>
-                                                    <option value="机器学习">机器学习</option>
+                                                <select class="form-control form-control-placeholder" name="jobType" value="{{ jobType }}">
+                                                    {% for onetype in  jobTypeList  %}
+                                                        <option value={{ onetype }} >{{ onetype }}</option>
+                                                    {% endfor %}
                                                 </select>
 
                                             </div>
@@ -88,8 +87,8 @@
                                     <p class="card-subtitle mb-4">
                                         <div class="card" style="height: 8rem;">
                                         <font size="4">结果：</font>
-                                                <font size="8"> {{ lowSalary }}K ——
-                                                {{ highSalary }}K </font>
+                                            <div id="result" style="font-size: 30px;">
+                                            </div>
                                         </div>
                                     </p>
                                 </div>
@@ -129,6 +128,23 @@
     <script src="/static/assets/js/china.js" ></script>
 
     <script type="text/javascript">
+        if ("{{ lowSalary }}" == -1 && "{{ highSalary }}" == -1){
+            warning()
+        }
+        else{
+            showResult()
+        }
+
+        function showResult() {
+            var divstr = document.getElementById("result")
+            divstr.innerText = "({{ jobCity }}, {{ jobType }}) \n"
+            divstr.innerText += "{{ lowSalary }}K —— {{ highSalary }}K "
+
+        }
+        function warning() {
+            var divstr = document.getElementById("result")
+            divstr.innerText = "暂时不支持此城市的预测"
+        }
     </script>
 
     <script src="/static/assets/js/area_echarts.js"></script>
